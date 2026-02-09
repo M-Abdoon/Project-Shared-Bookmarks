@@ -1,15 +1,5 @@
 import { getData, setData } from "./storage.js";
-const bookmark = {
-    id: "1",
-    url: "https://example.com",
-    title: "Example site",
-    description: "Just a test bookmark",
-    createdAt: Date.now(),
-    likes: 0
-  }
 
-  
-  
 export function createBookmark({ id, url, title, description }) {
 	if( !title || !url || !description || !id )
 		return false;
