@@ -11,20 +11,20 @@ const bookmark = {
   
   
 export function createBookmark({ id, url, title, description }) {
-	if( !title || !url || !description || !userId )
+	if( !title || !url || !description || !id )
 		return false;
 
-	if( typeof userId !== "string" ||
+	if( typeof id !== "string" ||
 		typeof url !== "string" || 
 		typeof title !== "string" ||
 		typeof description !== "string"
 	)
 		return false;
 
-	let getUserBookmark = getData(userId) ?? [];
+	let getUserBookmark = getData(id) ?? [];
 	
 	const newEntryJson = { 
-		id: userId,
+		id: id,
 		url: url, 
 		title: title, 
 		description: description,
@@ -34,10 +34,12 @@ export function createBookmark({ id, url, title, description }) {
 
 	getUserBookmark.push(newEntryJson);
 
-	setData(userId, getUserBookmark);
+	setData(id, getUserBookmark);
+	return newEntryJson;
 }
   
   
+  console.log(createBookmark(bookmark));
   console.log(getBookmarksSortedByDate(1));
 
 
