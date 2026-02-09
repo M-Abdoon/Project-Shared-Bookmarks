@@ -28,7 +28,7 @@ export function createBookmark({ id, url, title, description }) {
 		url: url, 
 		title: title, 
 		description: description,
-		timestamp: Date.now(),
+		createdAt: Date.now(),
 		likes: 0
 	};
 
@@ -37,14 +37,12 @@ export function createBookmark({ id, url, title, description }) {
 	setData(id, getUserBookmark);
 	return newEntryJson;
 }
-  
-  
-  console.log(createBookmark(bookmark));
-  console.log(getBookmarksSortedByDate(1));
 
-
-export function getBookmarksSortedByDate(userId) {
-	return getData(userId);
+export function getBookmarksSortedByDate(userId){
+	const data = getData(userId) ?? [];
+	data.sort((a, b) => b.createdAt - a.createdAt);
+	return data;
 }
+
 export function incrementLike(id){} // returns: void (nothing)
 export function setCurrentUser(userId){} // returns: void (nothing)
