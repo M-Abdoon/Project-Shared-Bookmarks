@@ -44,5 +44,5 @@ export function createBookmark({ id, url, title, description }) {
 export function getBookmarksSortedByDate(userId) {
 	return getData(userId);
 }
-incrementLike(id); // returns: void (nothing)
-setCurrentUser(userId); // returns: void (nothing)
+export function incrementLike(id){} // returns: void (nothing)
+export function setCurrentUser(userId){} // returns: void (nothing)
