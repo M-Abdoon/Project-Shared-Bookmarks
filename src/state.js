@@ -1,20 +1,18 @@
 import { getData, setData } from "./storage.js";
 
-export function createBookmark({ id, url, title, description }) {
-	if( !title || !url || !description || !id )
+export function createBookmark({ userId, url, title, description }) {
+	if( !title || !url || !description )
 		return false;
 
-	if( typeof id !== "string" ||
-		typeof url !== "string" || 
+	if(	typeof url !== "string" || 
 		typeof title !== "string" ||
 		typeof description !== "string"
 	)
 		return false;
 
-	let getUserBookmark = getData(id) ?? [];
+	let getUserBookmark = getData(userId) ?? [];
 	
 	const newEntryJson = { 
-		id: id,
 		url: url, 
 		title: title, 
 		description: description,
@@ -24,7 +22,7 @@ export function createBookmark({ id, url, title, description }) {
 
 	getUserBookmark.push(newEntryJson);
 
-	setData(id, getUserBookmark);
+	setData(userId, getUserBookmark);
 	return newEntryJson;
 }
 

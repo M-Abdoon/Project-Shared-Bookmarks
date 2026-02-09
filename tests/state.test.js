@@ -13,10 +13,10 @@ test("createBookmark() returns false if field missing", () => {
   assert.equal(result, false);
 });
 
-test("createBookmark() accepts only string inputs", () => {
+test("createBookmark() accepts only string user inputs", () => {
 	const result = createBookmark({
-		id: 123,
-		url: "url",
+		id: "1",
+		url: 4321,
 		title: "title",
 		description: "desc"
 	});
