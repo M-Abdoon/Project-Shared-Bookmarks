@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shared Bookmarks</title>
-    <script type="module" src="script.js"></script>
+    <script type="module" src="src/main.js"></script>
   </head>
   <body>
     <main>
@@ -12,12 +12,12 @@
         <h2>Select User</h2>
         <label for="user-dropdown">Choose a user:</label>
         <select id="user-dropdown">
-          <option value="">--Select a user:</option>
-          <option value="user1">User 1</option>
-          <option value="user2">User 2</option>
-          <option value="user3">User 3</option>
-          <option value="user4">User 4</option>
-          <option value="user5">User 5</option>
+          <option value="">--Select a user--</option>
+          <option value="1">User 1</option>
+          <option value="2">User 2</option>
+          <option value="3">User 3</option>
+          <option value="4">User 4</option>
+          <option value="5">User 5</option>
         </select>
       </section>
 
@@ -34,6 +34,11 @@
           <textarea id="bookmark-description" name="description" required></textarea>
           <button type="submit">Add Bookmark</button>
         </form>
+      </section>
+
+      <section id="bookmark-list">
+        <h2>Bookmarks</h2>
+        <ul id="bookmarks-container"></ul>
       </section>
     </main>
   </body>
