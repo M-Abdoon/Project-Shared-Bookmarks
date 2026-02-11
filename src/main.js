@@ -92,12 +92,10 @@ addBookmarkForm.addEventListener("submit", (e) => {
     if (!addBookmark) {
         alert("Book mark is not added, please make sure you entered valid inputs");
     } else {
-		alert("Bookmark seccusfully added");
-		bookmarkUrlInput.innerHTML = "";
-        bookmarkTitleInput.innerHTML = "";
-        bookmarkDescriptionInput.innerHTML = "";
-
+		addBookmarkForm.reset();
+		
 		const bookmarks = getBookmarksSortedByDate(defaultUserId);
-   		renderBookmarks(defaultUserId, bookmarks);
+		renderBookmarks(defaultUserId, bookmarks);
+		alert("Bookmark seccusfully added");
 	}
 });
