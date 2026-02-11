@@ -8,11 +8,15 @@ function renderBookmarks(userId, bookmarks) {
     bookmarksContainer.innerHTML = "";
 
     if (!bookmarks || bookmarks.length === 0) {
+        bookmarksContainer.style.display = "none";
+
         const emptyMessage = document.createElement("p");
         emptyMessage.innerText = "There are no bookmarks for this user.";
-        bookmarksContainer.appendChild(emptyMessage);
+        bookmarksContainer.parentElement.appendChild(emptyMessage);
         return;
     }
+
+    bookmarksContainer.style.display = "block";
 
     bookmarks.forEach((bookmark, objectId) => {
         const li = document.createElement("li");
@@ -41,7 +45,6 @@ function renderBookmarks(userId, bookmarks) {
         const likeButton = document.createElement("button");
         likeButton.innerText = "Like";
         likeButton.setAttribute("aria-label", `Like bookmark titled ${bookmark.title}`);
-
         likeButton.addEventListener("click", () => {
             incrementLike(userId, objectId, bookmark.likes);
             bookmark.likes += 1;
@@ -55,7 +58,6 @@ function renderBookmarks(userId, bookmarks) {
         const copyButton = document.createElement("button");
         copyButton.innerText = "Copy URL";
         copyButton.setAttribute("aria-label", `Copy URL for ${bookmark.title}`);
-
         copyButton.addEventListener("click", async () => {
             await navigator.clipboard.writeText(bookmark.url);
         });
@@ -78,8 +80,14 @@ integrateDropDown();
 userDropdown.addEventListener("change", () => {
     const userId = userDropdown.value;
 
+    const existingEmptyMsg = bookmarksContainer.parentElement.querySelector("p");
+    if (existingEmptyMsg) existingEmptyMsg.remove();
+
     if (!userId) {
-        bookmarksContainer.innerHTML = "<p>Select a user to view bookmarks.</p>";
+        bookmarksContainer.style.display = "none";
+        const emptyMessage = document.createElement("p");
+        emptyMessage.innerText = "Select a user to view bookmarks.";
+        bookmarksContainer.parentElement.appendChild(emptyMessage);
         return;
     }
 
