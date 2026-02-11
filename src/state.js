@@ -1,6 +1,6 @@
 import { getData, setData } from "./storage.js";
 
-export function createBookmark({ userId, url, title, description }) {
+export function createBookmark( userId, url, title, description ) {
 	if( !title || !url || !description )
 		return false;
 
@@ -36,7 +36,7 @@ export function incrementLike(userId, objectId, currentLikes){
 	let userBookmarksData = JSON.parse(localStorage[`stored-data-user-${userId}`]);
 	const numberOfBookmarks = userBookmarksData.length;
 
-	userBookmarksData[numberOfBookmarks - (objectId + 1)].likes = currentLikes + 1;
+	userBookmarksData[numberOfBookmarks-(objectId+1)].likes = currentLikes+1;
 	localStorage[`stored-data-user-${userId}`] = JSON.stringify(userBookmarksData);	
 }
 export function setCurrentUser(userId){} // returns: void (nothing)
