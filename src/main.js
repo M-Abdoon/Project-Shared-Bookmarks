@@ -5,7 +5,7 @@ const userDropdown = document.getElementById("user-dropdown");
 const bookmarksContainer = document.getElementById("bookmarks-container");
 const addBookmarkForm = document.getElementById("add-bookmark-form");
 
-let defaultUserId = 1;
+let defaultUserId = false;
 
 function renderBookmarks(userId, bookmarks) {
     bookmarksContainer.innerHTML = "";
@@ -65,7 +65,7 @@ userDropdown.addEventListener("change", () => {
 
     if (!defaultUserId) {
         bookmarksContainer.innerHTML = "<p>Select a user to view bookmarks.</p>";
-        return;
+        return false;
     }
 
     const bookmarks = getBookmarksSortedByDate(defaultUserId);
@@ -74,20 +74,30 @@ userDropdown.addEventListener("change", () => {
 
 addBookmarkForm.addEventListener("submit", (e) => {
 	e.preventDefault();
-	const bookmarkUrlInput = document.getElementById("bookmark-url").value;
-	const bookmarkTitleInput = document.getElementById("bookmark-title").value;
-	const bookmarkDescriptionInput = document.getElementById("bookmark-description").value;
+	const bookmarkUrlInput = document.getElementById("bookmark-url");
+	const bookmarkTitleInput = document.getElementById("bookmark-title");
+	const bookmarkDescriptionInput = document.getElementById("bookmark-description");
 
+	if(!defaultUserId) {
+		bookmarksContainer.innerHTML = "<p>Plese select a user to add a bookmark.</p>";
+        return false;
+	}
     const addBookmark = createBookmark(
         defaultUserId, 
-        bookmarkUrlInput, 
-        bookmarkTitleInput, 
-        bookmarkDescriptionInput
+        bookmarkUrlInput.value, 
+        bookmarkTitleInput.value, 
+        bookmarkDescriptionInput.value
     );
 
     if (!addBookmark) {
         alert("Book mark is not added, please make sure you entered valid inputs");
     } else {
 		alert("Bookmark seccusfully added");
+		bookmarkUrlInput.innerHTML = "";
+        bookmarkTitleInput.innerHTML = "";
+        bookmarkDescriptionInput.innerHTML = "";
+
+		const bookmarks = getBookmarksSortedByDate(defaultUserId);
+   		renderBookmarks(defaultUserId, bookmarks);
 	}
 });
