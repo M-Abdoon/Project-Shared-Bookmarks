@@ -1,6 +1,6 @@
 import { getData, setData } from "./storage.js";
 
-export function createBookmark({ userId, url, title, description }) {
+export function createBookmark( userId, url, title, description ) {
 	if( !title || !url || !description )
 		return false;
 
