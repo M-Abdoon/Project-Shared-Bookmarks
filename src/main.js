@@ -1,9 +1,9 @@
-import { getBookmarksSortedByDate } from "./state.js";
+import { getBookmarksSortedByDate, incrementLike } from "./state.js";
 
 const userDropdown = document.getElementById("user-dropdown");
 const bookmarksContainer = document.getElementById("bookmarks-container");
 
-function renderBookmarks(bookmarks) {
+function renderBookmarks(userId, bookmarks) {
     bookmarksContainer.innerHTML = "";
 
     if (!bookmarks || bookmarks.length === 0) {
@@ -12,8 +12,8 @@ function renderBookmarks(bookmarks) {
         bookmarksContainer.appendChild(emptyMessage);
         return;
     }
-
-    bookmarks.forEach(bookmark => {
+	
+    bookmarks.forEach((bookmark, objectId) => {
         const li = document.createElement("li");
 
         const link = document.createElement("a");
@@ -31,7 +31,18 @@ function renderBookmarks(bookmarks) {
         timestamp.innerText = `Created: ${date.toLocaleString()}`;
         li.appendChild(timestamp);
 
+		const likesCounter = document.createElement("p");
+		likesCounter.innerText = `Liked ${bookmark.likes} times`;
+		
+		likesCounter.addEventListener("click", () => {
+			incrementLike(userId, objectId, bookmark.likes);
+			likesCounter.innerText = `Liked ${bookmark.likes + 1} times`;
+		});
+
+		li.appendChild(likesCounter);
+
         bookmarksContainer.appendChild(li);
+
     });
 }
 
@@ -44,5 +55,5 @@ userDropdown.addEventListener("change", () => {
     }
 
     const bookmarks = getBookmarksSortedByDate(userId);
-    renderBookmarks(bookmarks);
+    renderBookmarks(userId, bookmarks);//userId should be passed for likes counter to work
 });
