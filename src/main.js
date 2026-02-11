@@ -1,4 +1,5 @@
 import { getBookmarksSortedByDate, incrementLike } from "./state.js";
+import { getUserIds } from "./storage.js";
 
 const userDropdown = document.getElementById("user-dropdown");
 const bookmarksContainer = document.getElementById("bookmarks-container");
@@ -45,6 +46,15 @@ function renderBookmarks(userId, bookmarks) {
 
     });
 }
+
+function integrateDropDown() {
+	const data = getUserIds();
+	data.forEach(userId => {
+		userDropdown.innerHTML += `<option value="${userId}">User ${userId}</option>`;
+	});
+}
+
+integrateDropDown();
 
 userDropdown.addEventListener("change", () => {
     const userId = userDropdown.value;
