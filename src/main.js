@@ -90,6 +90,4 @@ addBookmarkForm.addEventListener("submit", (e) => {
     } else {
 		alert("Bookmark seccusfully added");
 	}
-
-    console.log(addBookmark);
 });
