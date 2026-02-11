@@ -1,8 +1,11 @@
-import { getBookmarksSortedByDate, incrementLike } from "./state.js";
+import { createBookmark, getBookmarksSortedByDate, incrementLike } from "./state.js";
 import { getUserIds } from "./storage.js";
 
 const userDropdown = document.getElementById("user-dropdown");
 const bookmarksContainer = document.getElementById("bookmarks-container");
+const addBookmarkForm = document.getElementById("add-bookmark-form");
+
+let defaultUserId = false;
 
 function renderBookmarks(userId, bookmarks) {
     bookmarksContainer.innerHTML = "";
@@ -56,14 +59,43 @@ function integrateDropDown() {
 
 integrateDropDown();
 
-userDropdown.addEventListener("change", () => {
-    const userId = userDropdown.value;
 
-    if (!userId) {
+userDropdown.addEventListener("change", () => {
+    defaultUserId = userDropdown.value;
+
+    if (!defaultUserId) {
         bookmarksContainer.innerHTML = "<p>Select a user to view bookmarks.</p>";
-        return;
+        return false;
     }
 
-    const bookmarks = getBookmarksSortedByDate(userId);
-    renderBookmarks(userId, bookmarks);//userId should be passed for likes counter to work
+    const bookmarks = getBookmarksSortedByDate(defaultUserId);
+    renderBookmarks(defaultUserId, bookmarks);//userId should be passed for likes counter to work
+});
+
+addBookmarkForm.addEventListener("submit", (e) => {
+	e.preventDefault();
+	const bookmarkUrlInput = document.getElementById("bookmark-url");
+	const bookmarkTitleInput = document.getElementById("bookmark-title");
+	const bookmarkDescriptionInput = document.getElementById("bookmark-description");
+
+	if(!defaultUserId) {
+		bookmarksContainer.innerHTML = "<p>Plese select a user to add a bookmark.</p>";
+        return false;
+	}
+    const addBookmark = createBookmark(
+        defaultUserId, 
+        bookmarkUrlInput.value, 
+        bookmarkTitleInput.value, 
+        bookmarkDescriptionInput.value
+    );
+
+    if (!addBookmark) {
+        alert("Book mark is not added, please make sure you entered valid inputs");
+    } else {
+		addBookmarkForm.reset();
+		
+		const bookmarks = getBookmarksSortedByDate(defaultUserId);
+		renderBookmarks(defaultUserId, bookmarks);
+		alert("Bookmark seccusfully added");
+	}
 });
