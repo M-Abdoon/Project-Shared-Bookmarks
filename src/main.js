@@ -1,72 +1,11 @@
-import { getBookmarksSortedByDate, incrementLike } from "./state.js";
+import { getBookmarksSortedByDate, incrementLike, createBookmark } from "./state.js";
 import { getUserIds } from "./storage.js";
+import { renderBookmarks, showUserEmptyMessage, showBookmarkEmptyMessage } from "./ui.js";
 
 const userDropdown = document.getElementById("user-dropdown");
-const bookmarksContainer = document.getElementById("bookmarks-container");
+const addBookmarkForm = document.getElementById("add-bookmark-form");
 
-function renderBookmarks(userId, bookmarks) {
-    bookmarksContainer.innerHTML = "";
-
-    if (!bookmarks || bookmarks.length === 0) {
-        bookmarksContainer.style.display = "none";
-
-        const emptyMessage = document.createElement("p");
-        emptyMessage.innerText = "There are no bookmarks for this user.";
-        bookmarksContainer.parentElement.appendChild(emptyMessage);
-        return;
-    }
-
-    bookmarksContainer.style.display = "block";
-
-    bookmarks.forEach((bookmark, objectId) => {
-        const li = document.createElement("li");
-
-        const link = document.createElement("a");
-        link.href = bookmark.url;
-        link.innerText = bookmark.title;
-        link.target = "_blank";
-        li.appendChild(link);
-
-        const description = document.createElement("p");
-        description.innerText = bookmark.description;
-        li.appendChild(description);
-
-        const timestamp = document.createElement("small");
-        const date = new Date(bookmark.createdAt);
-        timestamp.innerText = `Created: ${date.toLocaleString()}`;
-        li.appendChild(timestamp);
-
-        const likeWrapper = document.createElement("div");
-
-        const likesCounter = document.createElement("span");
-        likesCounter.innerText = `Liked ${bookmark.likes} times`;
-        likesCounter.setAttribute("aria-live", "polite");
-
-        const likeButton = document.createElement("button");
-        likeButton.innerText = "Like";
-        likeButton.setAttribute("aria-label", `Like bookmark titled ${bookmark.title}`);
-        likeButton.addEventListener("click", () => {
-            incrementLike(userId, objectId, bookmark.likes);
-            bookmark.likes += 1;
-            likesCounter.innerText = `Liked ${bookmark.likes} times`;
-        });
-
-        likeWrapper.appendChild(likeButton);
-        likeWrapper.appendChild(likesCounter);
-        li.appendChild(likeWrapper);
-
-        const copyButton = document.createElement("button");
-        copyButton.innerText = "Copy URL";
-        copyButton.setAttribute("aria-label", `Copy URL for ${bookmark.title}`);
-        copyButton.addEventListener("click", async () => {
-            await navigator.clipboard.writeText(bookmark.url);
-        });
-
-        li.appendChild(copyButton);
-
-        bookmarksContainer.appendChild(li);
-    });
-}
+let currentUserId = "";
 
 function integrateDropDown() {
     const data = getUserIds();
@@ -74,23 +13,45 @@ function integrateDropDown() {
         userDropdown.innerHTML += `<option value="${userId}">User ${userId}</option>`;
     });
 }
-
 integrateDropDown();
 
 userDropdown.addEventListener("change", () => {
     const userId = userDropdown.value;
+    currentUserId = userId;
 
-    const existingEmptyMsg = bookmarksContainer.parentElement.querySelector("p");
-    if (existingEmptyMsg) existingEmptyMsg.remove();
+    showUserEmptyMessage("");
+    showBookmarkEmptyMessage("");
 
     if (!userId) {
-        bookmarksContainer.style.display = "none";
-        const emptyMessage = document.createElement("p");
-        emptyMessage.innerText = "Select a user to view bookmarks.";
-        bookmarksContainer.parentElement.appendChild(emptyMessage);
+        showUserEmptyMessage("Select a user to view bookmarks.");
         return;
     }
 
     const bookmarks = getBookmarksSortedByDate(userId);
-    renderBookmarks(userId, bookmarks);
+    renderBookmarks(userId, bookmarks, incrementLike);
+});
+
+addBookmarkForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (!currentUserId) {
+        showUserEmptyMessage("Please select a user to add a bookmark.");
+        return;
+    }
+
+    const url = document.getElementById("bookmark-url").value;
+    const title = document.getElementById("bookmark-title").value;
+    const description = document.getElementById("bookmark-description").value;
+
+    const bookmark = createBookmark(currentUserId, url, title, description);
+
+    if (!bookmark) {
+        alert("Bookmark is not added. Please make sure you entered valid inputs.");
+        return;
+    }
+
+    addBookmarkForm.reset();
+
+    const bookmarks = getBookmarksSortedByDate(currentUserId);
+    renderBookmarks(currentUserId, bookmarks, incrementLike);
 });
