@@ -1,8 +1,11 @@
-import { getBookmarksSortedByDate, incrementLike } from "./state.js";
+import { createBookmark, getBookmarksSortedByDate, incrementLike } from "./state.js";
 import { getUserIds } from "./storage.js";
 
 const userDropdown = document.getElementById("user-dropdown");
 const bookmarksContainer = document.getElementById("bookmarks-container");
+const addBookmarkForm = document.getElementById("add-bookmark-form");
+
+let defaultUserId = 1;
 
 function renderBookmarks(userId, bookmarks) {
     bookmarksContainer.innerHTML = "";
@@ -56,14 +59,37 @@ function integrateDropDown() {
 
 integrateDropDown();
 
-userDropdown.addEventListener("change", () => {
-    const userId = userDropdown.value;
 
-    if (!userId) {
+userDropdown.addEventListener("change", () => {
+    defaultUserId = userDropdown.value;
+
+    if (!defaultUserId) {
         bookmarksContainer.innerHTML = "<p>Select a user to view bookmarks.</p>";
         return;
     }
 
-    const bookmarks = getBookmarksSortedByDate(userId);
-    renderBookmarks(userId, bookmarks);//userId should be passed for likes counter to work
+    const bookmarks = getBookmarksSortedByDate(defaultUserId);
+    renderBookmarks(defaultUserId, bookmarks);//userId should be passed for likes counter to work
+});
+
+addBookmarkForm.addEventListener("submit", (e) => {
+	e.preventDefault();
+	const bookmarkUrlInput = document.getElementById("bookmark-url").value;
+	const bookmarkTitleInput = document.getElementById("bookmark-title").value;
+	const bookmarkDescriptionInput = document.getElementById("bookmark-description").value;
+
+    const addBookmark = createBookmark(
+        defaultUserId, 
+        bookmarkUrlInput, 
+        bookmarkTitleInput, 
+        bookmarkDescriptionInput
+    );
+
+    if (!addBookmark) {
+        alert("Book mark is not added, please make sure you entered valid inputs");
+    } else {
+		alert("Bookmark seccusfully added");
+	}
+
+    console.log(addBookmark);
 });
