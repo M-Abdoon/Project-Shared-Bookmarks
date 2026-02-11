@@ -13,7 +13,7 @@ function renderBookmarks(userId, bookmarks) {
         bookmarksContainer.appendChild(emptyMessage);
         return;
     }
-	
+
     bookmarks.forEach((bookmark, objectId) => {
         const li = document.createElement("li");
 
@@ -32,26 +32,45 @@ function renderBookmarks(userId, bookmarks) {
         timestamp.innerText = `Created: ${date.toLocaleString()}`;
         li.appendChild(timestamp);
 
-		const likesCounter = document.createElement("p");
-		likesCounter.innerText = `Liked ${bookmark.likes} times`;
-		
-		likesCounter.addEventListener("click", () => {
-			incrementLike(userId, objectId, bookmark.likes);
-			likesCounter.innerText = `Liked ${bookmark.likes + 1} times`;
-		});
+        const likeWrapper = document.createElement("div");
 
-		li.appendChild(likesCounter);
+        const likesCounter = document.createElement("span");
+        likesCounter.innerText = `Liked ${bookmark.likes} times`;
+        likesCounter.setAttribute("aria-live", "polite");
+
+        const likeButton = document.createElement("button");
+        likeButton.innerText = "Like";
+        likeButton.setAttribute("aria-label", `Like bookmark titled ${bookmark.title}`);
+
+        likeButton.addEventListener("click", () => {
+            incrementLike(userId, objectId, bookmark.likes);
+            bookmark.likes += 1;
+            likesCounter.innerText = `Liked ${bookmark.likes} times`;
+        });
+
+        likeWrapper.appendChild(likeButton);
+        likeWrapper.appendChild(likesCounter);
+        li.appendChild(likeWrapper);
+
+        const copyButton = document.createElement("button");
+        copyButton.innerText = "Copy URL";
+        copyButton.setAttribute("aria-label", `Copy URL for ${bookmark.title}`);
+
+        copyButton.addEventListener("click", async () => {
+            await navigator.clipboard.writeText(bookmark.url);
+        });
+
+        li.appendChild(copyButton);
 
         bookmarksContainer.appendChild(li);
-
     });
 }
 
 function integrateDropDown() {
-	const data = getUserIds();
-	data.forEach(userId => {
-		userDropdown.innerHTML += `<option value="${userId}">User ${userId}</option>`;
-	});
+    const data = getUserIds();
+    data.forEach(userId => {
+        userDropdown.innerHTML += `<option value="${userId}">User ${userId}</option>`;
+    });
 }
 
 integrateDropDown();
@@ -65,5 +84,5 @@ userDropdown.addEventListener("change", () => {
     }
 
     const bookmarks = getBookmarksSortedByDate(userId);
-    renderBookmarks(userId, bookmarks);//userId should be passed for likes counter to work
+    renderBookmarks(userId, bookmarks);
 });
