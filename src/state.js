@@ -39,5 +39,3 @@ export function incrementLike(userId, createdAt, currentLikes) {
     bookmark.likes = currentLikes + 1;
     setData(userId, userBookmarksData);
 }
-
-export function setCurrentUser(userId){} 
