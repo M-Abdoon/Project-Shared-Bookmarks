@@ -14,12 +14,12 @@ test("createBookmark() returns false if field missing", () => {
 });
 
 test("createBookmark() accepts only string user inputs", () => {
-	const result = createBookmark({
-		id: "1",
-		url: 4321,
-		title: "title",
-		description: "desc"
-	});
+	const result = createBookmark(
+		"1",
+		28675,
+		"title",
+		"description"
+	);
 
   assert.equal(result, false);
 });
