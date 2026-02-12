@@ -38,6 +38,7 @@ function renderBookmarks(userId, bookmarks) {
     if (!bookmarks || bookmarks.length === 0) {
         bookmarkEmptyMessage.innerText = "There are no bookmarks for this user.";
         bookmarkEmptyMessage.style.display = "block";
+		showBookmarkText.style.display = "none";
         return;
     }
 
