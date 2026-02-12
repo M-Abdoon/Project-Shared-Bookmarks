@@ -5,21 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Save and share bookmarks with descriptions and likes.">
     <title>Shared Bookmarks</title>
+    <link rel="stylesheet" href="src/style.css">
     <script type="module" src="src/main.js"></script>
   </head>
   <body>
     <main>
+      <section id="welcome">
+        <h1>Welcome to Shared Bookmarks!</h1>
+        <p>Save your favourite links, add descriptions, like other bookmarks, and copy URLs easily.</p>
+      </section>
+
+      <section id="notification-container">
+        <p id="notification" role="status" aria-live="polite"></p>
+      </section>
+
       <section id="user-selection">
         <h2>Select User</h2>
         <label for="user-dropdown">Choose a user:</label>
         <select id="user-dropdown">
           <option value="">--Select a user--</option>
         </select>
-        <p id="user-empty-message" style="display:none;color:red;"></p>
       </section>
 
       <section id="bookmark-form">
         <h2>Add a Bookmark</h2>
+        <p>Fill out the form below to save a new bookmark for the selected user.</p>
         <form id="add-bookmark-form">
           <label for="bookmark-url">URL:</label>
           <input type="url" id="bookmark-url" name="url" required>
@@ -34,10 +44,21 @@
         </form>
       </section>
 
+      <section id="instructions">
+        <h2>How to Use This App</h2>
+        <ul>
+          <li>Select a user from the dropdown to see their bookmarks.</li>
+          <li>Use the form to add new bookmarks for the selected user.</li>
+          <li>Click "Like" to increase a bookmark’s like count.</li>
+          <li>Click "Copy URL" to copy the bookmark link to your clipboard.</li>
+          <li>All changes are saved automatically and persist across page reloads.</li>
+        </ul>
+      </section>
+
       <section id="bookmark-list">
         <h2>Bookmarks</h2>
         <ul id="bookmarks-container"></ul>
-        <p id="bookmark-empty-message" style="display:none;color:red;"></p>
+        <p id="bookmark-empty-message"></p>
       </section>
     </main>
   </body>

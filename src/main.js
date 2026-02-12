@@ -4,19 +4,20 @@ import { getUserIds } from "./storage.js";
 const userDropdown = document.getElementById("user-dropdown");
 const addBookmarkForm = document.getElementById("add-bookmark-form");
 const bookmarksContainer = document.getElementById("bookmarks-container");
-const userEmptyMessage = document.getElementById("user-empty-message");
 const bookmarkEmptyMessage = document.getElementById("bookmark-empty-message");
+const notification = document.getElementById("notification");
 
 let currentUserId = "";
 
-const notification = document.createElement("p");
-notification.setAttribute("role", "status");
-notification.setAttribute("aria-live", "polite");
-notification.style.display = "none";
-notification.style.color = "green";
-notification.style.fontWeight = "bold";
-notification.style.marginBottom = "1rem";
-bookmarksContainer.parentNode.insertBefore(notification, bookmarksContainer);
+function showNotification(message, isError = false) {
+    notification.innerText = message;
+    notification.style.color = isError ? "red" : "green";
+    notification.style.display = "block";
+    notification.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+        notification.style.display = "none";
+    }, 3000);
+}
 
 function integrateDropDown() {
     userDropdown.innerHTML = '<option value="">--Select a user--</option>';
@@ -88,27 +89,16 @@ function renderBookmarks(userId, bookmarks) {
     });
 }
 
-function showNotification(message, isError = false) {
-    notification.innerText = message;
-    notification.style.color = isError ? "red" : "green";
-    notification.style.display = "block";
-    setTimeout(() => {
-        notification.style.display = "none";
-    }, 3000);
-}
-
 integrateDropDown();
 
 userDropdown.addEventListener("change", () => {
     const userId = userDropdown.value;
     currentUserId = userId;
 
-    userEmptyMessage.style.display = "none";
     bookmarkEmptyMessage.style.display = "none";
 
     if (!userId) {
-        userEmptyMessage.innerText = "Select a user to view bookmarks.";
-        userEmptyMessage.style.display = "block";
+        showNotification("Select a user to view bookmarks.", true);
         bookmarksContainer.innerHTML = "";
         return;
     }
@@ -119,10 +109,9 @@ userDropdown.addEventListener("change", () => {
 
 addBookmarkForm.addEventListener("submit", (e) => {
     e.preventDefault();
-
+    currentUserId = userDropdown.value;
     if (!currentUserId) {
-        userEmptyMessage.innerText = "Please select a user to add a bookmark.";
-        userEmptyMessage.style.display = "block";
+        showNotification("Please select a user before adding a bookmark!", true);
         return;
     }
 
