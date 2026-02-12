@@ -9,6 +9,8 @@ const notification = document.getElementById("notification");
 
 let currentUserId = "";
 
+integrateDropDown();
+
 function showNotification(message, isError = false) {
     notification.innerText = message;
     notification.style.color = isError ? "red" : "green";
@@ -88,8 +90,6 @@ function renderBookmarks(userId, bookmarks) {
         bookmarksContainer.appendChild(li);
     });
 }
-
-integrateDropDown();
 
 userDropdown.addEventListener("change", () => {
     const userId = userDropdown.value;
