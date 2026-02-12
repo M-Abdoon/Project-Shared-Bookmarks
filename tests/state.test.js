@@ -3,12 +3,12 @@ import test from "node:test";
 import { createBookmark } from "../src/state.js";
 
 test("createBookmark() returns false if field missing", () => {
-	const result = createBookmark({
-		id: "1",
-		url: "",
-		title: "Title",
-		description: "Desc"
-	});
+	const result = createBookmark(
+		"1",
+		"",
+		"Title",
+		"Desc"
+	);
 
   assert.equal(result, false);
 });
