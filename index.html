@@ -1,8 +1,66 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
-    <script type="module" src="script.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Save and share bookmarks with descriptions and likes."
+    />
+    <title>Shared Bookmarks</title>
+    <link rel="stylesheet" href="src/style.css" />
+    <script type="module" src="src/main.js"></script>
   </head>
   <body>
+    <main>
+      <section id="welcome">
+        <h1>Welcome to Shared Bookmarks!</h1>
+        <p>
+          Save your favourite links, add descriptions, like other bookmarks, and
+          copy URLs easily.
+        </p>
+      </section>
+
+      <section id="notification-container">
+        <p id="notification" role="status" aria-live="polite"></p>
+      </section>
+
+      <section id="user-selection">
+        <h2>Select User</h2>
+        <label for="user-dropdown">Choose a user:</label>
+        <select id="user-dropdown">
+          <option value="">--Select a user--</option>
+        </select>
+      </section>
+
+      <section id="bookmark-form">
+        <h2>Add a Bookmark</h2>
+        <p>
+          Fill out the form below to save a new bookmark for the selected user.
+        </p>
+        <form id="add-bookmark-form">
+          <label for="bookmark-url">URL:</label>
+          <input type="url" id="bookmark-url" name="url" required />
+
+          <label for="bookmark-title">Title:</label>
+          <input type="text" id="bookmark-title" name="title" required />
+
+          <label for="bookmark-description">Description:</label>
+          <textarea
+            id="bookmark-description"
+            name="description"
+            required
+          ></textarea>
+
+          <button type="submit">Add Bookmark</button>
+        </form>
+      </section>
+
+      <section id="bookmark-list">
+        <h2 id="showBookmarkText" style="display: none">Bookmarks</h2>
+        <ul id="bookmarks-container"></ul>
+        <p id="bookmark-empty-message"></p>
+      </section>
+    </main>
   </body>
 </html>
