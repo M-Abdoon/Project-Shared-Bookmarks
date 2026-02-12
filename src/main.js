@@ -4,6 +4,7 @@ import { getUserIds } from "./storage.js";
 const userDropdown = document.getElementById("user-dropdown");
 const addBookmarkForm = document.getElementById("add-bookmark-form");
 const bookmarksContainer = document.getElementById("bookmarks-container");
+const showBookmarkText = document.getElementById("showBookmarkText");
 const bookmarkEmptyMessage = document.getElementById("bookmark-empty-message");
 const notification = document.getElementById("notification");
 
@@ -41,6 +42,7 @@ function renderBookmarks(userId, bookmarks) {
     }
 
     bookmarkEmptyMessage.style.display = "none";
+	showBookmarkText.style.display = "block";
 
     bookmarks.forEach(bookmark => {
         const li = document.createElement("li");
@@ -100,6 +102,7 @@ userDropdown.addEventListener("change", () => {
     if (!userId) {
         showNotification("Select a user to view bookmarks.", true);
         bookmarksContainer.innerHTML = "";
+		showBookmarkText.style.display = "none";
         return;
     }
 
